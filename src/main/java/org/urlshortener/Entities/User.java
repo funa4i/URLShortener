@@ -12,16 +12,15 @@ import java.util.UUID;
 public class User {
 
     @Id
-    @GeneratedValue
     private long id;
 
-    @Column(name = "mail")
+    @Column(name = "mail", nullable = false, unique = true)
     private String mail;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "role")
+    @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Roles role;
 }

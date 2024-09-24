@@ -10,17 +10,16 @@ import lombok.Getter;
 public class URL {
 
     @Id
-    @GeneratedValue
     private long id;
 
-    @Column(name = "shortURL")
+    @Column(name = "shortURL", nullable = false)
     private String shortURL;
 
-    @Column(name = "fullURL")
+    @Column(name = "fullURL", nullable = false)
     private String fullURL;
 
-    @Column(name = "iterations")
-    private long iterations;
+    @Column(name = "iterations", nullable = false)
+    private int iterations;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "userID")
