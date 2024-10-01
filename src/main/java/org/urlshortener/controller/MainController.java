@@ -24,15 +24,20 @@ public class MainController {
     }
 
 
-    @PostMapping("/shorten")
-    private String getShortenUrl(@Valid @RequestBody UrlCreateRequest url){
-        return url.getFullUrl();
+    @PostMapping("/short")
+    private String getShortenUrl(@RequestBody UrlCreateRequest url){
+        return srv.getNewShortURL(url, "lyhov.tim09@gmail.com");
     }
 
     @PatchMapping("/iterations/{id}")
     private String setIterationsCount(@PathVariable("id") int newIter){
         srv.setShortUrlIterationsForNewUrls(newIter);
         return null;
+    }
+
+    @GetMapping("/{url}")
+    private void getLong(@PathVariable("url") String shortUrl){
+        srv.getLongUrl(shortUrl);
     }
 
 }

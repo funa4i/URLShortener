@@ -9,7 +9,7 @@ CREATE TABLE USERS(
 
 CREATE TABLE URLS (
     id BIGSERIAL PRIMARY KEY,
-    shortURL varchar(6) NOT NULL,
+    shortURL varchar(7) NOT NULL,
     fullURl varchar(255) NOT NULL,
     iterations SERIAL NOT NULL,
     userID BIGSERIAL REFERENCES USERS (id) ON DELETE SET NULL

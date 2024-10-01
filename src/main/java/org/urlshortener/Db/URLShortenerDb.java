@@ -4,7 +4,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.urlshortener.Db.Dao.URLDao;
 import org.urlshortener.Db.Dao.UserDao;
 import org.urlshortener.Db.Repository.UrlsRep;
@@ -17,11 +21,11 @@ import org.urlshortener.services.ShortUrlManagerImpSequence;
 @Component
 @RequiredArgsConstructor
 public class URLShortenerDb {
-    @Getter(AccessLevel.PRIVATE)
-    @Setter(AccessLevel.PRIVATE)
-
+    @Getter
+    @Setter
     private Integer urlIter = 100;
-    private ShortUrlManager lastUrl;
+
+    private final ShortUrlManager urlManager;
 
     private final URLDao urls;
 
@@ -35,18 +39,42 @@ public class URLShortenerDb {
         userRep.save(newUser);
     }
 
+
+    @Transactional
     public User getUserByMail(String mail){
-        return null;
+        var obj = userRep.getByMail(mail);
+        if (obj.isEmpty()){
+            // Ошибка отсутствия в бд
+            return null;
+        }
+        return obj.get();
     }
 
-    public void createUrl(URL newUrl, User user){
+    @Transactional
+    public String createUrl(URL newUrl, User user){
         if (user.getId() == null) {
-            // Добавить ошибку отсутсвия в бд
-            return;
+            //ошибка отсутсвия в бд
+            return null;
         }
         newUrl.setIterations(urlIter);
         newUrl.setUserID(user);
-        newUrl.setShortURL(lastUrl.getNextValue());
+        var shorturl = "";
+        do {
+            shorturl = urlManager.getNextValue();
+        }while (!urlRep.getByShortURL(shorturl).isEmpty());
+
+        newUrl.setShortURL(urlManager.getNextValue());
         urlRep.save(newUrl);
+        return newUrl.getShortURL();
+    }
+
+    @Transactional
+    public String getUrlByShort(String shortUrl){
+        var longurl = urlRep.getByShortURL(shortUrl);
+        if (!longurl.isEmpty()){
+            return longurl.get().getFullURL();
+        }
+        //ошибка отсутсвия в бд
+        return  null;
     }
 }

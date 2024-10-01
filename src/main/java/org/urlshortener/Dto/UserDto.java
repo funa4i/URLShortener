@@ -17,7 +17,7 @@ import org.springframework.validation.annotation.Validated;
 public class UserDto {
     @Email(message = "Email is not valid")
     @NotEmpty(message = "Email cannot be empty")
-      private String email;
+    private String email;
 
 
     @Size(max = 255, message = "Maximum password length 255")

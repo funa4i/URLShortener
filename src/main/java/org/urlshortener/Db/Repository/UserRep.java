@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface UserRep extends JpaRepository<User, Integer> {
 
+    Optional<User> getByMail(String mail);
+
 }
