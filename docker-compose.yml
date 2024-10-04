@@ -1,0 +1,72 @@
+version: "3.9"
+services:
+  postgres:
+    container_name: postgres_container
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: "URLShortener"
+      POSTGRES_USER: "root"
+      POSTGRES_PASSWORD: "password"
+      PGDATA: "/var/lib/postgresqlm/data/pgdata"
+    volumes:
+      - ../2. Init Database:/docker-entrypoint-initdb.d
+      - habrdb-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 4G
+    networks:
+      - postgres
+
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4:7.8
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "lyhov.tim09@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "password"
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - pgadmin-data:/var/lib/pgadminm
+    ports:
+      - "5050:80"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1G
+    networks:
+      - postgres
+
+  # postgres_exporter:
+  #   container_name: exporter_container
+  #   image: prometheuscommunity/postgres-exporter:v0.10.1
+  #   environment:
+  #     DATA_SOURCE_URI: "postgres:5432/habrdb?sslmode=disable"
+  #     DATA_SOURCE_USER: "habrpguser"
+  #     DATA_SOURCE_PASS: "pgpwd4habr"
+  #     PG_EXPORTER_EXTEND_QUERY_PATH: "/etc/postgres_exporter/queries.yaml"
+  #   volumes:
+  #     - ./queries.yaml:/etc/postgres_exporter/queries.yaml:ro
+  #   ports:
+  #     - "9187:9187"
+  #   restart: unless-stopped
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '0.2'
+  #         memory: 500M
+  #   networks:
+  #     - postgres
+
+volumes:
+  habrdb-data:
+  pgadmin-data:
+
+networks:
+  postgres:
+    driver: bridge

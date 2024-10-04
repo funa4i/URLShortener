@@ -15,6 +15,7 @@ import org.urlshortener.Db.Repository.UrlsRep;
 import org.urlshortener.Db.Repository.UserRep;
 import org.urlshortener.Entities.URL;
 import org.urlshortener.Entities.User;
+import org.urlshortener.Excemptions.NullObjectException;
 import org.urlshortener.services.ShortUrlManager;
 import org.urlshortener.services.ShortUrlManagerImpSequence;
 
@@ -41,27 +42,25 @@ public class URLShortenerDb {
 
 
     @Transactional
-    public User getUserByMail(String mail){
+    public User getUserByMail(String mail) throws NullObjectException {
         var obj = userRep.getByMail(mail);
         if (obj.isEmpty()){
-            // Ошибка отсутствия в бд
-            return null;
+            throw new NullObjectException(User.class.getSimpleName(), mail);
         }
         return obj.get();
     }
 
     @Transactional
-    public String createUrl(URL newUrl, User user){
+    public String createUrl(URL newUrl, User user) throws NullObjectException {
         if (user.getId() == null) {
-            //ошибка отсутсвия в бд
-            return null;
+            throw new NullObjectException(User.class.getSimpleName(), user.getMail());
         }
         newUrl.setIterations(urlIter);
         newUrl.setUserID(user);
         var shorturl = "";
         do {
             shorturl = urlManager.getNextValue();
-        }while (!urlRep.getByShortURL(shorturl).isEmpty());
+        }while (urlRep.getByShortURL(shorturl).isPresent());
 
         newUrl.setShortURL(urlManager.getNextValue());
         urlRep.save(newUrl);
@@ -69,12 +68,11 @@ public class URLShortenerDb {
     }
 
     @Transactional
-    public String getUrlByShort(String shortUrl){
+    public String getUrlByShort(String shortUrl) throws NullObjectException {
         var longurl = urlRep.getByShortURL(shortUrl);
         if (!longurl.isEmpty()){
             return longurl.get().getFullURL();
         }
-        //ошибка отсутсвия в бд
-        return  null;
+        throw new NullObjectException(URL.class.getSimpleName(), shortUrl);
     }
 }

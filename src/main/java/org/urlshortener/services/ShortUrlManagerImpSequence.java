@@ -4,17 +4,19 @@ package org.urlshortener.services;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
 @Component
+@NoArgsConstructor
 public class ShortUrlManagerImpSequence implements ShortUrlManager{
     public ShortUrlManagerImpSequence(StringBuilder stringBuilder){
         currentUrl = stringBuilder;
     }
 
-    private final StringBuilder currentUrl;
+    private StringBuilder currentUrl;
 
     @Override
     public String getNextValue() {

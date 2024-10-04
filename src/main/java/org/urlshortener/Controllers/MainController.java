@@ -1,17 +1,13 @@
-package org.urlshortener.controller;
+package org.urlshortener.Controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.urlshortener.Entities.User;
-import org.urlshortener.Enums.Roles;
 import org.urlshortener.services.URLShortenerServ;
 import org.urlshortener.Dto.*;
-
-import java.net.http.HttpResponse;
 
 @Slf4j
 @RestController
@@ -25,19 +21,25 @@ public class MainController {
 
 
     @PostMapping("/short")
-    private String getShortenUrl(@RequestBody UrlCreateRequest url){
-        return srv.getNewShortURL(url, "lyhov.tim09@gmail.com");
+    @ResponseStatus(value = HttpStatus.OK)
+    private UrlDto getShortenUrl(@RequestBody UrlDto url){
+        return new UrlDto(srv.getNewShortURL(url, "lyhov.tim09@gmail.com"));
     }
 
+
+
     @PatchMapping("/iterations/{id}")
+    @ResponseStatus(value = HttpStatus.OK)
     private String setIterationsCount(@PathVariable("id") int newIter){
         srv.setShortUrlIterationsForNewUrls(newIter);
         return null;
     }
 
+
     @GetMapping("/{url}")
-    private void getLong(@PathVariable("url") String shortUrl){
-        srv.getLongUrl(shortUrl);
+    private ResponseEntity<String> getLong(@PathVariable("url") String shortUrl){
+        HttpHeaders responseHeaders = new HttpHeaders();
+        return ResponseEntity.status(303).header("Location", srv.getLongUrl(shortUrl)).body("");
     }
 
 }

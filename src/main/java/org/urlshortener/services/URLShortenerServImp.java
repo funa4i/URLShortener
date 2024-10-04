@@ -7,11 +7,12 @@ import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
-import org.urlshortener.Dto.UrlCreateRequest;
+import org.urlshortener.Dto.UrlDto;
 import org.urlshortener.Dto.UserDto;
 import org.urlshortener.Entities.*;
 import org.urlshortener.Db.URLShortenerDb;
 import org.urlshortener.Enums.Roles;
+import org.urlshortener.Excemptions.NullObjectException;
 
 @Service
 @RequiredArgsConstructor
@@ -20,12 +21,12 @@ public class URLShortenerServImp implements URLShortenerServ {
 
     private final URLShortenerDb db;
 
-    private final static String urlPatter = "";
+    private final static String urlPatter = "http://localhost:8080/";
 
     @Override
-    public String getNewShortURL(@Valid UrlCreateRequest longURL, @Valid String userEmail) {
+    public String getNewShortURL(@Valid UrlDto longURL, @Valid String userEmail) throws NullObjectException {
         URL newUrl = new URL();
-        newUrl.setFullURL(longURL.getFullUrl());
+        newUrl.setFullURL(longURL.getUrl());
         return urlPatter + db.createUrl(newUrl, db.getUserByMail(userEmail));
     }
 
@@ -47,7 +48,7 @@ public class URLShortenerServImp implements URLShortenerServ {
     }
 
     @Override
-    public String getLongUrl(@Valid @Pattern(regexp = "([a-z]|[A-Z]|[0-9]){7}") String shortUrl) {
+    public String getLongUrl(@Valid @Pattern(regexp = "([a-z]|[A-Z]|[0-9]){7}") String shortUrl) throws NullObjectException {
         return db.getUrlByShort(shortUrl);
     }
 }
