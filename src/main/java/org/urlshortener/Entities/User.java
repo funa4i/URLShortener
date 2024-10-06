@@ -1,13 +1,17 @@
 package org.urlshortener.Entities;
+import jdk.jfr.Timestamp;
 import lombok.AccessLevel;
 import lombok.Setter;
 //import org.springframework.security.core.GrantedAuthority;
 //import org.springframework.security.core.authority.SimpleGrantedAuthority;
 //import org.springframework.security.core.userdetails.UserDetails;
+import org.hibernate.annotations.CreationTimestamp;
 import org.urlshortener.Enums.Roles;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -30,6 +34,16 @@ public class User  {
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Roles role;
+
+    @Column(name = "maxlinkavail", nullable = false)
+    private int maxLinkAvail;
+
+    @Column(name = "createlinksleft")
+    private int createLinksLeft;
+
+    @Column(name = "lastcreate")
+    @CreationTimestamp
+    private LocalDateTime lastcreate;
 
 //    @Override
 //    public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -3,6 +3,9 @@ CREATE TABLE USERS(
     mail varchar(255) NOT NULL,
     password text NOT NULL,
     role varchar(50) NOT NULL,
+    maxlinkavail serial  NOT NULL,
+    createlinksleft serial NOT NULL,
+    lastcreate TIMESTAMP NOT NULL,
     CONSTRAINT role_type_check CHECK(role='ADMIN' OR role='USER'),
     CONSTRAINT user_mail UNIQUE(mail)
 );
