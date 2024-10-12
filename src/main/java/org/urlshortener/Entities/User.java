@@ -1,4 +1,5 @@
 package org.urlshortener.Entities;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jdk.jfr.Timestamp;
 import lombok.AccessLevel;
 import lombok.Setter;
@@ -21,6 +22,7 @@ import java.time.LocalDateTime;
 public class User  {
 
     @Id
+    @JsonIgnore
     @Setter(value = AccessLevel.PRIVATE)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,6 +30,7 @@ public class User  {
     @Column(name = "mail", nullable = false, unique = true)
     private String mail;
 
+    @JsonIgnore
     @Column(name = "password", nullable = false)
     private String password;
 

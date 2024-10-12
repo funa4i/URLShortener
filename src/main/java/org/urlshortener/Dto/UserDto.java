@@ -6,9 +6,11 @@ import jakarta.validation.constraints.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
+import org.urlshortener.services.HashManager;
 
 @Component
 @Getter
@@ -19,7 +21,10 @@ public class UserDto {
     @NotEmpty(message = "Email cannot be empty")
     private String email;
 
-
+    @NotEmpty
     @Size(max = 255, message = "Maximum password length 255")
     private String password;
+
+    @Value("${app.default.createCount}")
+    private Integer countPerDay;
 }

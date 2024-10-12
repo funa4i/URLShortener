@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 
 @Component
-public class URLDaoImp implements URLDao{
+public class UrlDaoImp implements UrlDao {
     @PersistenceContext
     EntityManager em;
 

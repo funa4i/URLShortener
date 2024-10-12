@@ -2,6 +2,7 @@ package org.urlshortener.Dto;
 
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -20,4 +21,8 @@ public class UrlDto {
     @NotEmpty
     @Pattern(regexp = "((http:\\/\\/)|(https:\\/\\/)).*")
     private  String url;
+
+    @NotEmpty
+    @Min(1)
+    private Integer iterations;
 }

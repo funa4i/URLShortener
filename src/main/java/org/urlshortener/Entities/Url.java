@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "urls")
-public class URL {
+public class Url {
 
     @Id
     @Setter(AccessLevel.PRIVATE)
@@ -26,7 +26,11 @@ public class URL {
     @Column(name = "iterations", nullable = false)
     private Integer iterations;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "userID")
-    private User userID;
+    @ManyToOne()
+    @JoinColumn(name = "USERMAIL", referencedColumnName = "MAIL")
+    private User userMail;
+
+    public void decreaseIterations(){
+        iterations--;
+    }
 }

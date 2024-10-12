@@ -9,4 +9,6 @@ public interface UserRep extends JpaRepository<User, Integer> {
 
     Optional<User> getByMail(String mail);
 
+    Optional<User> getById(Long id);
+
 }

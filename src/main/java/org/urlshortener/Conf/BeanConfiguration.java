@@ -1,11 +1,8 @@
 package org.urlshortener.Conf;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.*;
 
-import org.urlshortener.Db.Dao.URLDao;
-import org.urlshortener.Db.Repository.UrlsRep;
+import org.urlshortener.Db.Dao.UrlDao;
 import org.urlshortener.services.ShortUrlManagerImpRandom;
 import org.urlshortener.services.ShortUrlManagerImpSequence;
 
@@ -13,19 +10,13 @@ import org.urlshortener.services.ShortUrlManagerImpSequence;
 public class BeanConfiguration {
 
     @Lazy
-    public ShortUrlManagerImpSequence getShortUrlManagerImpSequence(URLDao dao){
+    public ShortUrlManagerImpSequence getShortUrlManagerImpSequence(UrlDao dao){
         return new ShortUrlManagerImpSequence(new StringBuilder(dao.getLastUrl()));
     }
-
 
     @Bean
     @Primary
     public ShortUrlManagerImpRandom getShortUrlManagerImpRandom(){
         return new ShortUrlManagerImpRandom();
     }
-
-//    @Bean
-//    public String getString(){
-//        return "";
-//    }
 }

@@ -1,5 +1,5 @@
 package org.urlshortener.Db.Dao;
 
-public interface URLDao {
+public interface UrlDao {
     String getLastUrl();
 }
