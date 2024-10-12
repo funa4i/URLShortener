@@ -32,10 +32,10 @@ public class UrlShortenerServImp implements UrlShortenerServ {
     private final IUrlTransferMapper urlTransferMapper;
 
     @Value("${app.default.createCount}")
-    private final Integer DEFAULT_COUNT_PER_DAY;
+    private Integer DEFAULT_COUNT_PER_DAY;
 
     @Value("${app.default.urlPath}")
-    private final String URL_PATTERN;
+    private String URL_PATTERN;
 
     @Override
     public UrlTransfer getNewShortURL(@Valid UrlTransfer longURL, @Email String userEmail) throws NullObjectException {

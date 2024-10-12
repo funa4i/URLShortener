@@ -12,7 +12,6 @@ import org.urlshortener.Db.Dao.UserDao;
 import org.urlshortener.Db.Repository.UrlsRep;
 import org.urlshortener.Db.Repository.UserRep;
 import org.urlshortener.Dto.RefactorUrlRequest;
-import org.urlshortener.Dto.UrlTransfer;
 import org.urlshortener.Entities.Url;
 import org.urlshortener.Entities.User;
 import org.urlshortener.Enums.Roles;
@@ -63,7 +62,7 @@ public class UrlShortenerDb {
         var shorturl = "";
         do {
             shorturl = urlManager.getNextValue();
-        }while (urlRep.getByShortURL(shorturl).isPresent());
+        }while (urlRep.getByShortUrl(shorturl).isPresent());
 
         url.setShortUrl(urlManager.getNextValue());
         urlRep.save(url);
@@ -73,7 +72,7 @@ public class UrlShortenerDb {
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     public Pair<Boolean,String> getUrlByShort(String shortUrl) throws NullObjectException {
         var longUrl = urlRep
-                .getByShortURL(shortUrl)
+                .getByShortUrl(shortUrl)
                 .orElseThrow(
                 () -> new NullObjectException(Url.class.getSimpleName(), shortUrl)
                 );

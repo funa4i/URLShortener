@@ -14,13 +14,16 @@ import org.urlshortener.Dto.*;
 
 @Slf4j
 @RestController
+
 @RequiredArgsConstructor
 public class MainController {
 
-    @Value("${app.default.page.page}}")
-    private final Integer page;
+    @Value("${app.default.page.page}")
+    private Integer PAGE;
 
-    private final Integer limits;
+    @Value("${app.default.page.limits}")
+    private Integer LIMITS;
+
 
     private final UrlShortenerServ srv;
 
@@ -48,10 +51,10 @@ public class MainController {
             @RequestBody(required = false) Integer limits
             ){
         if (page == null){
-            page = this.page;
+            page = this.PAGE;
         }
         if (limits == null){
-            limits = this.limits;
+            limits = this.LIMITS;
         }
         return srv.getUsers(page, limits);
     }
@@ -62,10 +65,10 @@ public class MainController {
             @RequestBody(required = false) Integer limits
     ){
         if (page == null){
-            page = this.page;
+            page = this.PAGE;
         }
         if (limits == null){
-            limits = this.limits;
+            limits = this.LIMITS;
         }
         return srv.getUrls(page, limits);
     }

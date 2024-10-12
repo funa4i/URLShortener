@@ -2,14 +2,11 @@ package org.urlshortener.Dto;
 
 
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.stereotype.Component;
 
 @Component
-@Getter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class UrlTransfer {
@@ -18,11 +15,11 @@ public class UrlTransfer {
     @Pattern(regexp = "((http:\\/\\/)|(https:\\/\\/)).*")
     private String url;
 
-    @NotEmpty
+
     @Min(1)
+    @NotNull
     private Integer iterations;
 
     @Null
-    @Setter
     private String mail;
 }

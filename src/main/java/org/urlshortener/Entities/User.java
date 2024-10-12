@@ -19,6 +19,9 @@ import java.time.LocalDateTime;
 @Setter
 @Table(name = "users")
 public class User  {
+    public User(String mail){
+        this.mail = mail;
+    }
 
     @Id
     @JsonIgnore
