@@ -15,9 +15,12 @@ import org.urlshortener.Dto.RefactorUrlRequest;
 import org.urlshortener.Entities.Url;
 import org.urlshortener.Entities.User;
 import org.urlshortener.Enums.Roles;
+import org.urlshortener.Excemptions.AttemptCountException;
 import org.urlshortener.Excemptions.NullObjectException;
-import org.urlshortener.services.HashManagerSha256Imp;
-import org.urlshortener.services.ShortUrlManager;
+import org.urlshortener.Manager.HashManagerSha256Imp;
+import org.urlshortener.Manager.ShortUrlManager;
+
+import java.time.LocalDateTime;
 
 @Component
 @RequiredArgsConstructor
@@ -53,16 +56,26 @@ public class UrlShortenerDb {
         return obj.get();
     }
 
-    @Transactional
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public Url createUrl(Url url) throws NullObjectException {
         var user = getUserByMail(url.getUserMail().getMail());
+        if (LocalDateTime.now().isAfter(user.getLastCreate().plusDays(1))){
+            user.setCreateLinksLeft(user.getMaxLinkAvail());
+            user.setLastCreate(LocalDateTime.now());
+        }
 
+        if(user.getCreateLinksLeft() <= 0){
+            throw new AttemptCountException(user.getLastCreate().plusDays(1));
+        }
         url.setUserMail(user);
 
         var shorturl = "";
         do {
             shorturl = urlManager.getNextValue();
         }while (urlRep.getByShortUrl(shorturl).isPresent());
+
+        user.decreaseCreatedLinks();
+        userRep.save(user);
 
         url.setShortUrl(urlManager.getNextValue());
         urlRep.save(url);

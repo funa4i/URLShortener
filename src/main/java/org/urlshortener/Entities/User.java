@@ -1,7 +1,6 @@
 package org.urlshortener.Entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AccessLevel;
-import lombok.Setter;
+import lombok.*;
 //import org.springframework.security.core.GrantedAuthority;
 //import org.springframework.security.core.authority.SimpleGrantedAuthority;
 //import org.springframework.security.core.userdetails.UserDetails;
@@ -9,7 +8,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.urlshortener.Enums.Roles;
 
 import jakarta.persistence.*;
-import lombok.Getter;
 
 import java.time.LocalDateTime;
 
@@ -18,6 +16,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Table(name = "users")
+@NoArgsConstructor
 public class User  {
     public User(String mail){
         this.mail = mail;
@@ -49,6 +48,10 @@ public class User  {
     @Column(name = "lastcreate")
     @CreationTimestamp
     private LocalDateTime lastCreate;
+
+    public void decreaseCreatedLinks(){
+        createLinksLeft--;
+    }
 
 //    @Override
 //    public Collection<? extends GrantedAuthority> getAuthorities() {

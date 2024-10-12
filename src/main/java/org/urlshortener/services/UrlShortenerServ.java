@@ -1,6 +1,7 @@
 package org.urlshortener.services;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.data.domain.Page;
@@ -12,10 +13,10 @@ import org.urlshortener.Entities.User;
 import org.urlshortener.Excemptions.NullObjectException;
 
 public interface UrlShortenerServ {
-    UrlTransfer getNewShortURL(@Valid UrlTransfer longURL, @Valid String userEmail) throws NullObjectException;
+    UrlTransfer getNewShortURL(@Valid UrlTransfer longURL, @Email String userEmail) throws NullObjectException;
 
     void signUp(@Valid UserValid user);
-    String getLongUrl(@Valid @Pattern(regexp = "([a-z]|[A-Z]|[0-9]){7}")  String shortUrl) throws NullObjectException;
+    String getLongUrl(@Valid @Pattern(regexp = "([a-z]|[A-Z]|[0-9]|-){7}")  String shortUrl) throws NullObjectException;
 
     User getUser(@Min(1) Long id);
 

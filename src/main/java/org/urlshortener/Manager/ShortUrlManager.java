@@ -1,4 +1,4 @@
-package org.urlshortener.services;
+package org.urlshortener.Manager;
 
 import java.util.ArrayList;
 import java.util.Arrays;

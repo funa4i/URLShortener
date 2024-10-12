@@ -1,10 +1,8 @@
-package org.urlshortener.services;
+package org.urlshortener.Manager;
 
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;
-import java.util.Random;
 
 @Component
 public class ShortUrlManagerImpRandom implements ShortUrlManager {

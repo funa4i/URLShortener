@@ -73,7 +73,7 @@ public class UrlShortenerServImp implements UrlShortenerServ {
         db.createUser(userValidMapper.toUser(user), DEFAULT_COUNT_PER_DAY);
     }
     @Override
-    public String getLongUrl(@Valid @Pattern(regexp = "([a-z]|[A-Z]|[0-9]){7}") String shortUrl) throws NullObjectException {
+    public String getLongUrl(@Valid @Pattern(regexp = "([a-z]|[A-Z]|[0-9]|-){7}") String shortUrl) throws NullObjectException {
         var obj = db.getUrlByShort(shortUrl);
         if (obj.a) {
 

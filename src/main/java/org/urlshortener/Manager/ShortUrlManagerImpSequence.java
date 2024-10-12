@@ -1,13 +1,8 @@
-package org.urlshortener.services;
+package org.urlshortener.Manager;
 
 
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.Arrays;
 
 @Component
 @NoArgsConstructor
