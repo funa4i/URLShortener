@@ -2,7 +2,9 @@ package org.urlshortener.services;
 
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -10,11 +12,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.urlshortener.Dto.RefactorUrlRequest;
-import org.urlshortener.Dto.UrlDto;
-import org.urlshortener.Dto.UserDto;
+import org.urlshortener.Dto.UrlTransfer;
+import org.urlshortener.Dto.UserValid;
 import org.urlshortener.Entities.*;
 import org.urlshortener.Db.UrlShortenerDb;
 import org.urlshortener.Excemptions.NullObjectException;
+import org.urlshortener.Mappers.IUrlTransferMapper;
+import org.urlshortener.Mappers.IUserValidMapper;
 
 @Service
 @RequiredArgsConstructor
@@ -23,12 +27,20 @@ public class UrlShortenerServImp implements UrlShortenerServ {
 
     private final UrlShortenerDb db;
 
+    private final IUserValidMapper userValidMapper;
+
+    private final IUrlTransferMapper urlTransferMapper;
+
+    @Value("${app.default.createCount}")
+    private final Integer DEFAULT_COUNT_PER_DAY;
+
     @Value("${app.default.urlPath}")
-    private String urlPatter;
+    private final String URL_PATTERN;
 
     @Override
-    public String getNewShortURL(@Valid UrlDto longURL, @Valid String userEmail) throws NullObjectException {
-        return urlPatter + db.createUrl(longURL.getUrl(), longURL.getIterations() ,userEmail);
+    public UrlTransfer getNewShortURL(@Valid UrlTransfer longURL, @Email String userEmail) throws NullObjectException {
+        longURL.setMail(userEmail);
+        return urlTransferMapper.toUrlTransfer(db.createUrl(urlTransferMapper.toUrl(longURL)), URL_PATTERN);
     }
 
     @Override
@@ -57,8 +69,8 @@ public class UrlShortenerServImp implements UrlShortenerServ {
     }
 
     @Override
-    public void signUp(@Valid UserDto user){
-        db.createUser(user);
+    public void signUp(@Valid UserValid user){
+        db.createUser(userValidMapper.toUser(user), DEFAULT_COUNT_PER_DAY);
     }
     @Override
     public String getLongUrl(@Valid @Pattern(regexp = "([a-z]|[A-Z]|[0-9]){7}") String shortUrl) throws NullObjectException {

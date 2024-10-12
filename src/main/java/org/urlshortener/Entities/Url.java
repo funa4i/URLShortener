@@ -18,10 +18,10 @@ public class Url {
     private Long id;
 
     @Column(name = "shortURL", nullable = false)
-    private String shortURL;
+    private String shortUrl;
 
     @Column(name = "fullURL", nullable = false)
-    private String fullURL;
+    private String fullUrl;
 
     @Column(name = "iterations", nullable = false)
     private Integer iterations;

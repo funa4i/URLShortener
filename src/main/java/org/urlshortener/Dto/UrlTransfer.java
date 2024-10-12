@@ -1,11 +1,7 @@
 package org.urlshortener.Dto;
 
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,13 +12,17 @@ import org.springframework.stereotype.Component;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UrlDto {
+public class UrlTransfer {
 
     @NotEmpty
     @Pattern(regexp = "((http:\\/\\/)|(https:\\/\\/)).*")
-    private  String url;
+    private String url;
 
     @NotEmpty
     @Min(1)
     private Integer iterations;
+
+    @Null
+    @Setter
+    private String mail;
 }

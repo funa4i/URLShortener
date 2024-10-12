@@ -1,6 +1,5 @@
 package org.urlshortener.Entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jdk.jfr.Timestamp;
 import lombok.AccessLevel;
 import lombok.Setter;
 //import org.springframework.security.core.GrantedAuthority;
@@ -39,14 +38,14 @@ public class User  {
     private Roles role;
 
     @Column(name = "maxlinkavail", nullable = false)
-    private int maxLinkAvail;
+    private Integer maxLinkAvail;
 
     @Column(name = "createlinksleft")
-    private int createLinksLeft;
+    private Integer createLinksLeft;
 
     @Column(name = "lastcreate")
     @CreationTimestamp
-    private LocalDateTime lastcreate;
+    private LocalDateTime lastCreate;
 
 //    @Override
 //    public Collection<? extends GrantedAuthority> getAuthorities() {

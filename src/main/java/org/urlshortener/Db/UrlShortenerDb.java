@@ -12,7 +12,7 @@ import org.urlshortener.Db.Dao.UserDao;
 import org.urlshortener.Db.Repository.UrlsRep;
 import org.urlshortener.Db.Repository.UserRep;
 import org.urlshortener.Dto.RefactorUrlRequest;
-import org.urlshortener.Dto.UserDto;
+import org.urlshortener.Dto.UrlTransfer;
 import org.urlshortener.Entities.Url;
 import org.urlshortener.Entities.User;
 import org.urlshortener.Enums.Roles;
@@ -37,21 +37,16 @@ public class UrlShortenerDb {
     private final HashManagerSha256Imp hash;
 
     @Transactional
-    public void createUser(UserDto newUser){
-        User usr = new User();
-        usr.setMaxLinkAvail(newUser.getCountPerDay());
-        usr.setCreateLinksLeft(newUser.getCountPerDay());
-        usr.setMail(newUser.getEmail());
-        usr.setPassword(
-                hash.getHashFrom(newUser.getPassword(), newUser.getEmail()
-                ));
-        usr.setRole(Roles.USER);
-        userRep.save(usr);
+    public void createUser(User newUser, Integer countsPerDay){
+        newUser.setMaxLinkAvail(countsPerDay);
+        newUser.setCreateLinksLeft(countsPerDay);
+        newUser.setRole(Roles.USER);
+        userRep.save(newUser);
     }
 
 
     @Transactional
-    public User getUserByMail(String mail) throws NullObjectException {
+    private User getUserByMail(String mail) throws NullObjectException {
         var obj = userRep.getByMail(mail);
         if (obj.isEmpty()){
             throw new NullObjectException(User.class.getSimpleName(), mail);
@@ -60,23 +55,19 @@ public class UrlShortenerDb {
     }
 
     @Transactional
-    public String createUrl(String newUrlSt, Integer iterations, String mail) throws NullObjectException {
-        var user = getUserByMail(mail);
+    public Url createUrl(Url url) throws NullObjectException {
+        var user = getUserByMail(url.getUserMail().getMail());
 
-        Url newUrl = new Url();
-
-        newUrl.setIterations(iterations);
-        newUrl.setUserMail(user);
-        newUrl.setFullURL(newUrlSt);
+        url.setUserMail(user);
 
         var shorturl = "";
         do {
             shorturl = urlManager.getNextValue();
         }while (urlRep.getByShortURL(shorturl).isPresent());
 
-        newUrl.setShortURL(urlManager.getNextValue());
-        urlRep.save(newUrl);
-        return newUrl.getShortURL();
+        url.setShortUrl(urlManager.getNextValue());
+        urlRep.save(url);
+        return url;
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
@@ -95,7 +86,7 @@ public class UrlShortenerDb {
             urlRep.save(longUrl);
         }
 
-        return new Pair<>(longUrl.getIterations() <= 0, longUrl.getFullURL()) ;
+        return new Pair<>(longUrl.getIterations() <= 0, longUrl.getFullUrl()) ;
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
@@ -142,7 +133,7 @@ public class UrlShortenerDb {
             saveUrl.setIterations(url.getNewIterations());
         }
         if (url.getNewFullUrl() != null){
-            saveUrl.setFullURL(url.getNewFullUrl());
+            saveUrl.setFullUrl(url.getNewFullUrl());
         }
         urlRep.save(saveUrl);
     }

@@ -3,7 +3,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,21 +25,17 @@ public class MainController {
     private final UrlShortenerServ srv;
 
     @PostMapping("/sign-up")
-    public void signUp(@RequestBody UserDto user){
+    public void signUp(@RequestBody UserValid user){
         srv.signUp(user);
     }
 
     @PostMapping("/short")
     @ResponseStatus(value = HttpStatus.OK)
-    private UrlDto getShortenUrl(@RequestBody UrlDto url){
-        return new UrlDto(srv.getNewShortURL(url, "lyhov.tim09@gmail.com"), url.getIterations());
+    private UrlTransfer getShortenUrl(@RequestBody UrlTransfer url) {
+        var mail = "lyhov.tim09@gmail.com";
+        return srv.getNewShortURL(url, mail);
     }
 
-    @GetMapping("/{url}")
-    private ResponseEntity<String> getLong(@PathVariable("url") String shortUrl){
-        HttpHeaders responseHeaders = new HttpHeaders();
-        return ResponseEntity.status(303).header("Location", srv.getLongUrl(shortUrl)).body("");
-    }
 
     @GetMapping("/users/{id}")
     private User getUser(@PathVariable("id") Long id){
@@ -86,4 +81,13 @@ public class MainController {
     private void saveUrl(@RequestBody RefactorUrlRequest changeUrl){
         srv.changeCurrentUrl(changeUrl);
     }
+
+    @GetMapping("/{url}")
+    private ResponseEntity<String> getLong(@PathVariable("url") String shortUrl){
+        HttpHeaders responseHeaders = new HttpHeaders();
+        return ResponseEntity.status(303).header("Location", srv.getLongUrl(shortUrl)).body("");
+    }
 }
+
+
+
