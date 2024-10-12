@@ -45,31 +45,19 @@ public class MainController {
         return srv.getUser(id);
     }
 
-    @PostMapping("/users")
+    @GetMapping("/users")
     private Page<User> getUsers(
-            @RequestBody(required = false) Integer page,
-            @RequestBody(required = false) Integer limits
-            ){
-        if (page == null){
-            page = this.PAGE;
-        }
-        if (limits == null){
-            limits = this.LIMITS;
-        }
-        return srv.getUsers(page, limits);
+           @RequestParam(name = "page",  required = false ,defaultValue = "${app.default.page.page}")  Integer page,
+           @RequestParam(name = "limits", required = false, defaultValue = "${app.default.page.limits}")  Integer limits
+    ){
+        return srv.getUsers((Integer) page, (Integer) limits);
     }
 
-    @PostMapping("/urls")
+    @GetMapping("/urls")
     private Page<Url> getUrls(
-            @RequestBody(required = false) Integer page,
-            @RequestBody(required = false) Integer limits
-    ){
-        if (page == null){
-            page = this.PAGE;
-        }
-        if (limits == null){
-            limits = this.LIMITS;
-        }
+            @RequestParam(name = "page",  required = false ,defaultValue = "${app.default.page.page}")  Integer page,
+            @RequestParam(name = "limits", required = false, defaultValue = "${app.default.page.limits}")  Integer limits
+    ) {
         return srv.getUrls(page, limits);
     }
 

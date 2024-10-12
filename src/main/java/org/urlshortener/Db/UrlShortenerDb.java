@@ -117,7 +117,9 @@ public class UrlShortenerDb {
 
     @Transactional
     public Page<User> getAllUsers(Integer page, Integer limit){
-        return userRep.findAll(PageRequest.of(page, limit));
+        var ob = userRep.findAll(PageRequest.of(page, limit));
+        ob.forEach((x) -> x.setPassword(""));
+        return ob;
     }
 
     @Transactional
