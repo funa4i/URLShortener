@@ -17,3 +17,10 @@ spring:
     password: password
     locations: classpath:db/migrations
     enabled: true
+app:
+  default:
+    page:
+      page: 0
+      limits: 20
+    urlPath : http://localhost:8080/
+    createCount : 10
