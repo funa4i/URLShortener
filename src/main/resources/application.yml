@@ -5,7 +5,7 @@ spring:
     username: root
     password: password
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: validate
     properties:
@@ -17,6 +17,21 @@ spring:
     password: password
     locations: classpath:db/migrations
     enabled: true
+  mail:
+    host: smtp.gmail.com
+    port: 465
+    username: yourMail
+    password: yourApplicationPassword
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          socketFactory:
+            port: 465
+            class: javax.net.ssl.SSLSocketFactory
+            fallback: false
 app:
   default:
     page:
@@ -24,3 +39,4 @@ app:
       limits: 20
     urlPath : http://localhost:8080/
     createCount : 10
+    linkDurationDays : 31

@@ -15,7 +15,6 @@ public class UrlTransfer {
     @Pattern(regexp = "((http:\\/\\/)|(https:\\/\\/)).*")
     private String url;
 
-
     @Min(1)
     @NotNull
     private Integer iterations;

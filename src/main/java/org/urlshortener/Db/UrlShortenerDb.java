@@ -2,6 +2,8 @@ package org.urlshortener.Db;
 
 import lombok.RequiredArgsConstructor;
 import org.antlr.v4.runtime.misc.Pair;
+import org.antlr.v4.runtime.misc.Triple;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
@@ -16,11 +18,14 @@ import org.urlshortener.Entities.Url;
 import org.urlshortener.Entities.User;
 import org.urlshortener.Enums.Roles;
 import org.urlshortener.Excemptions.AttemptCountException;
+import org.urlshortener.Excemptions.ExpiredLinkException;
 import org.urlshortener.Excemptions.NullObjectException;
 import org.urlshortener.Manager.HashManagerSha256Imp;
 import org.urlshortener.Manager.ShortUrlManager;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -38,12 +43,27 @@ public class UrlShortenerDb {
 
     private final HashManagerSha256Imp hash;
 
+    @Value(value = "${app.default.linkDurationDays}")
+    private Long linkDurationDays;
+
     @Transactional
     public void createUser(User newUser, Integer countsPerDay){
         newUser.setMaxLinkAvail(countsPerDay);
         newUser.setCreateLinksLeft(countsPerDay);
         newUser.setRole(Roles.USER);
         userRep.save(newUser);
+    }
+
+    @Transactional
+    public List<Triple<String, String,String>> getAllExpiredLinks(){
+        ArrayList<Triple<String, String, String>> resList = new ArrayList<>();
+        urls.getMailOfExpiredLinks().forEach((x) ->resList.add(new Triple<>(((User)x[0]).getMail(),(String) x[1],(String) x[2])));
+        return resList;
+    }
+
+    @Transactional
+    public void deleteExpiredLinks(){
+        urls.deleteExpiredLinks();
     }
 
     @Transactional
@@ -85,21 +105,25 @@ public class UrlShortenerDb {
         userRep.save(user);
 
         url.setShortUrl(urlManager.getNextValue());
+        url.setValidUntil(LocalDateTime.now().plusDays(linkDurationDays));
         urlRep.save(url);
         return url;
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public Pair<Boolean,Url> getUrlByShort(String shortUrl) throws NullObjectException {
+    public Pair<Boolean,Url> getUrlByShort(String shortUrl) throws ExpiredLinkException {
         var longUrl = urlRep
                 .getByShortUrl(shortUrl)
                 .orElseThrow(
                 () -> new NullObjectException(Url.class.getSimpleName(), shortUrl)
                 );
-
+        if (LocalDateTime.now().isAfter(longUrl.getValidUntil())){
+            deleteUrl(longUrl);
+            throw new ExpiredLinkException(longUrl.getShortUrl(), longUrl.getFullUrl(), longUrl.getUserMail().getMail());
+        }
         longUrl.decreaseIterations();
         if (longUrl.getIterations() <= 0){
-             deleteUrl(longUrl);
+            deleteUrl(longUrl);
         }
         else {
             urlRep.save(longUrl);

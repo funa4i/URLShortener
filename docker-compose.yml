@@ -24,7 +24,7 @@ services:
 
   pgadmin:
     container_name: pgadmin_container
-    image: dpage/pgadmin4:7.8
+    image: dpage/pgadmin4:8.12
     environment:
       PGADMIN_DEFAULT_EMAIL: "lyhov.tim09@gmail.com"
       PGADMIN_DEFAULT_PASSWORD: "password"

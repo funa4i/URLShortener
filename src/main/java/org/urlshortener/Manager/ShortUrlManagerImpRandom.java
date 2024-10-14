@@ -1,10 +1,11 @@
 package org.urlshortener.Manager;
 
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 
-@Component
+@Service
 public class ShortUrlManagerImpRandom implements ShortUrlManager {
     @Override
     public String getNextValue() {

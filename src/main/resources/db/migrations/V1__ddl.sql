@@ -12,8 +12,9 @@ CREATE TABLE USERS(
 
 CREATE TABLE URLS (
     id BIGSERIAL PRIMARY KEY,
-    shortURL varchar(7) NOT NULL,
-    fullURl varchar(255) NOT NULL,
+    shortUrl varchar(7) NOT NULL,
+    fullUrl varchar(255) NOT NULL,
     iterations SERIAL NOT NULL,
+    validUntil TIMESTAMP NOT NULL,
     USERMAIL varchar(255) CONSTRAINT usermail_mail REFERENCES USERS (mail) ON DELETE SET NULL
 );

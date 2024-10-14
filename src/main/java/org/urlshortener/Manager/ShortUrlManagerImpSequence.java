@@ -3,8 +3,9 @@ package org.urlshortener.Manager;
 
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 @NoArgsConstructor
 public class ShortUrlManagerImpSequence implements ShortUrlManager{
     public ShortUrlManagerImpSequence(StringBuilder stringBuilder){

@@ -3,9 +3,12 @@ package org.urlshortener.Entities;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import jakarta.persistence.*;
+import jdk.jfr.Timestamp;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -18,19 +21,20 @@ public class Url {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "shortURL", nullable = false)
+    @Column(name = "shorturl", nullable = false)
     private String shortUrl;
 
-    @Column(name = "fullURL", nullable = false)
+    @Column(name = "fullurl", nullable = false)
     private String fullUrl;
 
     @Column(name = "iterations", nullable = false)
     private Integer iterations;
 
-
+    @Column(name = "validuntil", nullable = false)
+    private LocalDateTime validUntil;
 
     @ManyToOne()
-    @JoinColumn(name = "USERMAIL", referencedColumnName = "MAIL")
+    @JoinColumn(name = "usermail", referencedColumnName = "mail")
     private User userMail;
 
     @JsonGetter(value = "userMail")

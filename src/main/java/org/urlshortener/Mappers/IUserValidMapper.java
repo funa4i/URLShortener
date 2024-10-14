@@ -12,9 +12,6 @@ import org.urlshortener.Entities.User;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface IUserValidMapper {
 
-
-
-
     @Mapping(target = "mail", source = "email")
     @Mapping(target = "password", expression = "java(" +
             "new org.urlshortener.Manager.HashManagerSha256Imp()" +

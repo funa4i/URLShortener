@@ -42,11 +42,11 @@ public class User  {
     @Column(name = "maxlinkavail", nullable = false)
     private Integer maxLinkAvail;
 
-    @Column(name = "createlinksleft")
+    @Column(name = "createlinksleft", nullable = false)
     private Integer createLinksLeft;
 
-    @Column(name = "lastcreate")
     @CreationTimestamp
+    @Column(name = "lastcreate", nullable = false)
     private LocalDateTime lastCreate;
 
     public void decreaseCreatedLinks(){

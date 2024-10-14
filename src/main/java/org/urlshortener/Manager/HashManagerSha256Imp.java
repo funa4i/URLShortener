@@ -2,10 +2,11 @@ package org.urlshortener.Manager;
 
 import com.google.common.hash.Hashing;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 
-@Component
+@Service
 public class HashManagerSha256Imp implements HashManager {
 
     @Override

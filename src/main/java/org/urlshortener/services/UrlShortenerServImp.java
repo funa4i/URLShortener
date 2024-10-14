@@ -4,10 +4,11 @@ package org.urlshortener.services;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
+import org.antlr.v4.runtime.misc.Pair;
 import org.springframework.data.domain.Page;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
@@ -16,6 +17,7 @@ import org.urlshortener.Dto.UrlTransfer;
 import org.urlshortener.Dto.UserValid;
 import org.urlshortener.Entities.*;
 import org.urlshortener.Db.UrlShortenerDb;
+import org.urlshortener.Excemptions.ExpiredLinkException;
 import org.urlshortener.Excemptions.NullObjectException;
 import org.urlshortener.Mappers.IUrlTransferMapper;
 import org.urlshortener.Mappers.IUserValidMapper;
@@ -80,7 +82,17 @@ public class UrlShortenerServImp implements UrlShortenerServ {
     }
     @Override
     public String getLongUrl(@Valid @Pattern(regexp = "([a-z]|[A-Z]|[0-9]|-){7}") String shortUrl) throws NullObjectException {
-        var obj = db.getUrlByShort(shortUrl);
+        Pair<Boolean, Url> obj;
+        try {
+            obj = db.getUrlByShort(shortUrl);
+        }
+        catch (ExpiredLinkException ex){
+            emailSrv.expiredUrl(ex.getMail(), URL_PATTERN + ex.getLink(), ex.getFullUrl());
+            var exp = new NullObjectException(Url.class.getSimpleName(), ex.getLink());
+            exp.setStackTrace(ex.getStackTrace());
+            throw exp;
+        }
+
         if (obj.a) {
             emailSrv.expiredUrl(obj.b.getUserMail().getMail(),
                     URL_PATTERN + obj.b.getShortUrl(),
