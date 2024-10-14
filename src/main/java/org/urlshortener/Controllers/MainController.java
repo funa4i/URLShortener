@@ -12,26 +12,25 @@ import org.urlshortener.Entities.User;
 import org.urlshortener.services.UrlShortenerServ;
 import org.urlshortener.Dto.*;
 
-@Slf4j
 @RestController
-
 @RequiredArgsConstructor
 public class MainController {
 
-    @Value("${app.default.page.page}")
-    private Integer PAGE;
-
-    @Value("${app.default.page.limits}")
-    private Integer LIMITS;
-
-
     private final UrlShortenerServ srv;
 
-    @PostMapping("/sign-up")
+    // da
+    @GetMapping("/{url}")
+    private ResponseEntity<String> getLong(@PathVariable("url") String shortUrl){
+        return ResponseEntity.status(303).header("Location", srv.getLongUrl(shortUrl)).body("");
+    }
+
+    // da
+    @PostMapping("/signUp")
     public void signUp(@RequestBody UserValid user){
         srv.signUp(user);
     }
 
+    // da
     @PostMapping("/short")
     @ResponseStatus(value = HttpStatus.OK)
     private UrlTransfer getShortenUrl(@RequestBody UrlTransfer url) {
@@ -39,12 +38,12 @@ public class MainController {
         return srv.getNewShortURL(url, mail);
     }
 
-
+    //da
     @GetMapping("/users/{id}")
     private User getUser(@PathVariable("id") Long id){
         return srv.getUser(id);
     }
-
+    // da
     @GetMapping("/users")
     private Page<User> getUsers(
            @RequestParam(name = "page",  required = false ,defaultValue = "${app.default.page.page}")  Integer page,
@@ -52,7 +51,7 @@ public class MainController {
     ){
         return srv.getUsers((Integer) page, (Integer) limits);
     }
-
+    // da
     @GetMapping("/urls")
     private Page<Url> getUrls(
             @RequestParam(name = "page",  required = false ,defaultValue = "${app.default.page.page}")  Integer page,
@@ -61,23 +60,20 @@ public class MainController {
         return srv.getUrls(page, limits);
     }
 
+    // da
     @ResponseStatus(value = HttpStatus.OK)
     @DeleteMapping("/urls/{id}")
     private void delUrl(@PathVariable("id") Long id){
         srv.deleteUrl(id);
     }
 
-
-    @PatchMapping("/changeUrl")
+    // da
+    @PatchMapping("/linkChange")
     private void saveUrl(@RequestBody RefactorUrlRequest changeUrl){
         srv.changeCurrentUrl(changeUrl);
     }
 
-    @GetMapping("/{url}")
-    private ResponseEntity<String> getLong(@PathVariable("url") String shortUrl){
-        HttpHeaders responseHeaders = new HttpHeaders();
-        return ResponseEntity.status(303).header("Location", srv.getLongUrl(shortUrl)).body("");
-    }
+
 }
 
 
