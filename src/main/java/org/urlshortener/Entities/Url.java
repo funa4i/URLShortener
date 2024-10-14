@@ -1,6 +1,7 @@
 package org.urlshortener.Entities;
 
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -26,9 +27,16 @@ public class Url {
     @Column(name = "iterations", nullable = false)
     private Integer iterations;
 
+
+
     @ManyToOne()
     @JoinColumn(name = "USERMAIL", referencedColumnName = "MAIL")
     private User userMail;
+
+    @JsonGetter(value = "userMail")
+    private String getTheUserMail(){
+        return userMail.getMail();
+    }
 
     public void decreaseIterations(){
         iterations--;

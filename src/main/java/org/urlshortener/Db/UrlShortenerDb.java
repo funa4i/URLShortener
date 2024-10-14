@@ -46,6 +46,13 @@ public class UrlShortenerDb {
         userRep.save(newUser);
     }
 
+    @Transactional
+    public boolean validUser(User userForValid){
+        return userForValid.getPassword()
+                        .equals(
+                                getUserByMail(userForValid.getMail())
+                                        .getPassword());
+    }
 
     @Transactional
     private User getUserByMail(String mail) throws NullObjectException {
@@ -83,7 +90,7 @@ public class UrlShortenerDb {
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public Pair<Boolean,String> getUrlByShort(String shortUrl) throws NullObjectException {
+    public Pair<Boolean,Url> getUrlByShort(String shortUrl) throws NullObjectException {
         var longUrl = urlRep
                 .getByShortUrl(shortUrl)
                 .orElseThrow(
@@ -92,13 +99,13 @@ public class UrlShortenerDb {
 
         longUrl.decreaseIterations();
         if (longUrl.getIterations() <= 0){
-            deleteUrl(longUrl);
+             deleteUrl(longUrl);
         }
         else {
             urlRep.save(longUrl);
         }
 
-        return new Pair<>(longUrl.getIterations() <= 0, longUrl.getFullUrl()) ;
+        return new Pair<>(longUrl.getIterations() <= 0, longUrl) ;
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)

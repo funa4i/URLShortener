@@ -27,4 +27,6 @@ public interface UrlShortenerServ {
     void changeCurrentUrl(@Valid RefactorUrlRequest urlEntity);
 
     void deleteUrl(@Valid Long id);
+
+    boolean validPassword(UserValid userValid);
 }
