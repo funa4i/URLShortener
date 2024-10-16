@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.misc.Triple;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+//import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -182,8 +182,9 @@ public class UrlShortenerDb {
 
     @Transactional
     public User getUseByMail(String mail){
-        return userRep.getByMail(mail).orElseThrow(
-                () -> new UsernameNotFoundException("User " + mail + " doesn't found")
-        );
+//        return userRep.getByMail(mail).orElseThrow(
+//                () -> new UsernameNotFoundException("User " + mail + " doesn't found")
+//        );
+        return null;
     }
 }
