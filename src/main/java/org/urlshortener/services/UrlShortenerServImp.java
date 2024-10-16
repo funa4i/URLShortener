@@ -34,8 +34,7 @@ public class UrlShortenerServImp implements UrlShortenerServ {
     private final IUrlTransferMapper urlTransferMapper;
 
     private final EmailServ emailSrv;
-    @Value("${app.default.createCount}")
-    private Integer DEFAULT_COUNT_PER_DAY;
+
 
     @Value("${app.default.urlPath}")
     private String URL_PATTERN;
@@ -71,15 +70,6 @@ public class UrlShortenerServImp implements UrlShortenerServ {
         db.deleteUrl(id);
     }
 
-    @Override
-    public boolean validPassword(UserValid userValid) {
-        return db.validUser(userValidMapper.toUser(userValid));
-    }
-
-    @Override
-    public void signUp(@Valid UserValid user){
-        db.createUser(userValidMapper.toUser(user), DEFAULT_COUNT_PER_DAY);
-    }
     @Override
     public String getLongUrl(@Valid @Pattern(regexp = "([a-z]|[A-Z]|[0-9]|-){7}") String shortUrl) throws NullObjectException {
         Pair<Boolean, Url> obj;

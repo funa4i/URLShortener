@@ -7,10 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
-@Component
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class ExceptionView {
 
     private Integer status;
@@ -18,4 +15,10 @@ public class ExceptionView {
     private String message;
 
     private LocalDateTime timestamp;
+
+    public ExceptionView(Integer status, String message){
+        this.status = status;
+        this.message = message;
+        this.timestamp = LocalDateTime.now();
+    }
 }

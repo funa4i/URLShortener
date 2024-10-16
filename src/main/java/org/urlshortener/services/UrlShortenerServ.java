@@ -15,7 +15,6 @@ import org.urlshortener.Excemptions.NullObjectException;
 public interface UrlShortenerServ {
     UrlTransfer getNewShortURL(@Valid UrlTransfer longURL, @Email String userEmail) throws NullObjectException;
 
-    void signUp(@Valid UserValid user);
     String getLongUrl(@Valid @Pattern(regexp = "([a-z]|[A-Z]|[0-9]|-){7}")  String shortUrl) throws NullObjectException;
 
     User getUser(@Min(1) Long id);
@@ -27,6 +26,4 @@ public interface UrlShortenerServ {
     void changeCurrentUrl(@Valid RefactorUrlRequest urlEntity);
 
     void deleteUrl(@Valid Long id);
-
-    boolean validPassword(UserValid userValid);
 }

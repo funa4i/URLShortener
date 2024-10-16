@@ -5,19 +5,24 @@ import lombok.*;
 //import org.springframework.security.core.authority.SimpleGrantedAuthority;
 //import org.springframework.security.core.userdetails.UserDetails;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.urlshortener.Enums.Roles;
 
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 
+@Data
 @Entity
-@Getter
-@Setter
 @Table(name = "users")
 @NoArgsConstructor
-public class User  {
+public class User implements UserDetails {
     public User(String mail){
         this.mail = mail;
     }
@@ -53,18 +58,31 @@ public class User  {
         createLinksLeft--;
     }
 
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return List.of(new SimpleGrantedAuthority(role.name()));
-//    }
-//
-//    @Override
-//    public String getPassword() {
-//        return password;
-//    }
-//
-//    @Override
-//    public String getUsername() {
-//        return mail;
-//    }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        ArrayList<SimpleGrantedAuthority> resList = new ArrayList<>();
+        resList.add(new SimpleGrantedAuthority(role.name()));
+        if (role == Roles.GOD){
+            resList.add(new SimpleGrantedAuthority(Roles.ADMIN.name()));
+        }
+        if (resList.contains(new SimpleGrantedAuthority(Roles.ADMIN.name()))){
+            resList.add(new SimpleGrantedAuthority(Roles.USER.name()));
+        }
+       return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return mail;
+    }
+
+    @Override
+    public boolean isAccountNonLocked(){
+        return role != Roles.BUN;
+    }
 }

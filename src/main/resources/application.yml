@@ -1,4 +1,7 @@
 spring:
+  jwt:
+    secret: SomeVerySecureSecretForJwtSomeVerySecureSecretForJwtSomeVerySecureSecretForJwtSomeVerySecureSecretForJwt
+    duration: 30m
   application.name: spring
   datasource:
     url: jdbc:postgresql://localhost:5432/URLShortener

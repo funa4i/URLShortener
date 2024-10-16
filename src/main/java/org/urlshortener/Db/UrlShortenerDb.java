@@ -6,6 +6,7 @@ import org.antlr.v4.runtime.misc.Triple;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ import org.urlshortener.Enums.Roles;
 import org.urlshortener.Excemptions.AttemptCountException;
 import org.urlshortener.Excemptions.ExpiredLinkException;
 import org.urlshortener.Excemptions.NullObjectException;
+import org.urlshortener.Excemptions.ObjectAlreadyExists;
 import org.urlshortener.Manager.HashManagerSha256Imp;
 import org.urlshortener.Manager.ShortUrlManager;
 
@@ -48,6 +50,9 @@ public class UrlShortenerDb {
 
     @Transactional
     public void createUser(User newUser, Integer countsPerDay){
+        if (userRep.getByMail(newUser.getMail()).isPresent()){
+            throw new ObjectAlreadyExists(newUser.getMail(), User.class.getSimpleName());
+        }
         newUser.setMaxLinkAvail(countsPerDay);
         newUser.setCreateLinksLeft(countsPerDay);
         newUser.setRole(Roles.USER);
@@ -64,14 +69,6 @@ public class UrlShortenerDb {
     @Transactional
     public void deleteExpiredLinks(){
         urls.deleteExpiredLinks();
-    }
-
-    @Transactional
-    public boolean validUser(User userForValid){
-        return userForValid.getPassword()
-                        .equals(
-                                getUserByMail(userForValid.getMail())
-                                        .getPassword());
     }
 
     @Transactional
@@ -181,5 +178,12 @@ public class UrlShortenerDb {
             saveUrl.setFullUrl(url.getNewFullUrl());
         }
         urlRep.save(saveUrl);
+    }
+
+    @Transactional
+    public User getUseByMail(String mail){
+        return userRep.getByMail(mail).orElseThrow(
+                () -> new UsernameNotFoundException("User " + mail + " doesn't found")
+        );
     }
 }
