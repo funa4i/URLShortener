@@ -9,6 +9,8 @@ import io.jsonwebtoken.impl.security.PrivateECKey;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.urlshortener.Entities.User;
 import org.urlshortener.Enums.Roles;
@@ -18,7 +20,9 @@ import java.security.PrivateKey;
 import java.time.Duration;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtServ {
@@ -32,12 +36,13 @@ public class JwtServ {
 
     public String generateToken(UserDetails userDetails){
         Map<String, Object> claims = new HashMap<>();
-        if (userDetails instanceof User){
-            claims.put("Role", ((User) userDetails).getRole().name());
-        }
+            claims.put("Roles", userDetails.getAuthorities()
+                    .stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.toList()));
         return Jwts.builder()
-                .claims(claims)
                 .subject(userDetails.getUsername())
+                .claims(claims)
                 .issuedAt(new Date())
                 .expiration(new Date( new Date().getTime() + lifeTime.toMillis()))
                 .signWith(getSigningKey())
@@ -55,12 +60,13 @@ public class JwtServ {
     }
 
 
-    public Roles getRole(String token){
-        return getAllClaims(token).get("Role", Roles.class);
+    public List<String> getRole(String token){
+        return getAllClaims(token).get("Roles", List.class);
     }
 
     private Claims getAllClaims(String token){
         return Jwts.parser()
+                .setSigningKey(getSigningKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();

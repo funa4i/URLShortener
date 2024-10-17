@@ -32,8 +32,4 @@ public class UserServ implements UserDetailsService {
     public void createNewUser(@Valid UserValid user){
        db.createUser(userValidMapper.toUser(user), DEFAULT_COUNT_PER_DAY);
     }
-
-    public User reformuUser(UserValid req){
-        return userValidMapper.toUser(req);
-    }
 }

@@ -1,7 +1,7 @@
 CREATE TABLE USERS(
     id BIGSERIAL CONSTRAINT userPK PRIMARY KEY,
     mail varchar(255) NOT NULL,
-    password text NOT NULL,
+    password varchar(255) NOT NULL,
     role varchar(50) NOT NULL,
     maxlinkavail serial  NOT NULL,
     createlinksleft serial NOT NULL,

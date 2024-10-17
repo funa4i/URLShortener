@@ -18,6 +18,7 @@ public class UserValid {
     @Email(message = "Email is not valid")
     private String email;
 
-    @NotEmpty
+    @Size(min = 5)
+    @Size(max = 255)
     private String password;
 }

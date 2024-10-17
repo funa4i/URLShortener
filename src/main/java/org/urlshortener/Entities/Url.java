@@ -3,7 +3,6 @@ package org.urlshortener.Entities;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import jakarta.persistence.*;
-import jdk.jfr.Timestamp;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;

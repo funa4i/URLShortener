@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.misc.Triple;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-//import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +22,7 @@ import org.urlshortener.Excemptions.AttemptCountException;
 import org.urlshortener.Excemptions.ExpiredLinkException;
 import org.urlshortener.Excemptions.NullObjectException;
 import org.urlshortener.Excemptions.ObjectAlreadyExists;
-import org.urlshortener.Manager.HashManagerSha256Imp;
+import org.urlshortener.Manager.HashManagerImp;
 import org.urlshortener.Manager.ShortUrlManager;
 
 import java.time.LocalDateTime;
@@ -43,7 +43,7 @@ public class UrlShortenerDb {
 
     private final UserRep userRep;
 
-    private final HashManagerSha256Imp hash;
+    private final HashManagerImp hash;
 
     @Value(value = "${app.default.linkDurationDays}")
     private Long linkDurationDays;
@@ -182,9 +182,8 @@ public class UrlShortenerDb {
 
     @Transactional
     public User getUseByMail(String mail){
-//        return userRep.getByMail(mail).orElseThrow(
-//                () -> new UsernameNotFoundException("User " + mail + " doesn't found")
-//        );
-        return null;
+        return userRep.getByMail(mail).orElseThrow(
+                () -> new UsernameNotFoundException("User " + mail + " doesn't found")
+        );
     }
 }
