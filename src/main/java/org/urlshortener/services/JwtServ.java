@@ -2,21 +2,15 @@ package org.urlshortener.services;
 
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.impl.security.PrivateECKey;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import org.urlshortener.Entities.User;
-import org.urlshortener.Enums.Roles;
 
 import java.security.Key;
-import java.security.PrivateKey;
 import java.time.Duration;
 import java.util.Date;
 import java.util.HashMap;

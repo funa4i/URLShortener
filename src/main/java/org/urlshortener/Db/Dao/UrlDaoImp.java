@@ -14,6 +14,7 @@ public class UrlDaoImp implements UrlDao {
     @PersistenceContext
     EntityManager em;
 
+    //Последний созданыый url
     @Override
     @Transactional
     public String getLastUrl(){
@@ -24,6 +25,7 @@ public class UrlDaoImp implements UrlDao {
         return obj.get(0);
     }
 
+    // Mail всех протухших ссылок
     @Override
     @Transactional
     public List getMailOfExpiredLinks(){
@@ -33,6 +35,7 @@ public class UrlDaoImp implements UrlDao {
 
     }
 
+    // Удалить все протухшие ссылки
     @Override
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void deleteExpiredLinks() {

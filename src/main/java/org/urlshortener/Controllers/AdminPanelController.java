@@ -4,7 +4,7 @@ package org.urlshortener.Controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.urlshortener.Dto.RefactorUrlRequest;
 import org.urlshortener.Dto.RoleChangeRequest;
@@ -14,12 +14,12 @@ import org.urlshortener.services.UrlShortenerServ;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin")
 public class AdminPanelController {
 
     private final UrlShortenerServ srv;
 
-    @GetMapping("/users")
+    // Все юзеры
+    @GetMapping("/admin/users")
     private Page<User> getUsers(
             @RequestParam(name = "page",  required = false ,defaultValue = "${app.default.page.page}")  Integer page,
             @RequestParam(name = "limits", required = false, defaultValue = "${app.default.page.limits}")  Integer limits
@@ -27,7 +27,8 @@ public class AdminPanelController {
         return srv.getUsers((Integer) page, (Integer) limits);
     }
 
-    @GetMapping("/urls")
+    // Все ссылки
+    @GetMapping("/admin/urls")
     private Page<Url> getUrls(
             @RequestParam(name = "page",  required = false ,defaultValue = "${app.default.page.page}")  Integer page,
             @RequestParam(name = "limits", required = false, defaultValue = "${app.default.page.limits}")  Integer limits
@@ -35,19 +36,22 @@ public class AdminPanelController {
         return srv.getUrls(page, limits);
     }
 
+    // Удалить ссылку
     @ResponseStatus(value = HttpStatus.OK)
-    @DeleteMapping("/urls/{id}")
+    @DeleteMapping("/admin/urls/{id}")
     private void delUrl(@PathVariable("id") Long id){
         srv.deleteUrl(id);
     }
 
-    @PatchMapping("/linkChange")
-    private void saveUrl(@RequestBody RefactorUrlRequest changeUrl){
-        srv.changeCurrentUrl(changeUrl);
+    // Сохранить изменение
+    @PatchMapping("/admin/linkChange/{id}")
+    private void saveUrl(@RequestBody RefactorUrlRequest changeUrl, @PathVariable("id") Long id) {
+        srv.changeCurrentUrl(id, changeUrl);
     }
 
-    @PostMapping("/userRole/{id}")
-    private void setRole(@RequestBody RoleChangeRequest request){
-
+    //Изменить роль
+    @PostMapping("/admin/userRole/{id}")
+    private void setRole(@RequestBody RoleChangeRequest request, @PathVariable("id") Long id) {
+        srv.setUserRole(SecurityContextHolder.getContext().getAuthentication().getName(), id, request.getNewRole());
     }
 }

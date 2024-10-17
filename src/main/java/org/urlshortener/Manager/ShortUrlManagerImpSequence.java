@@ -2,7 +2,6 @@ package org.urlshortener.Manager;
 
 
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service

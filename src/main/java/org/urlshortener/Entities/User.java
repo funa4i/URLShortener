@@ -1,22 +1,20 @@
 package org.urlshortener.Entities;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.urlshortener.Enums.Roles;
-
-import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 
 @Data
@@ -29,11 +27,11 @@ public class User implements UserDetails {
     }
 
     @Id
-    @JsonIgnore
     @Setter(value = AccessLevel.PRIVATE)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @Column(name = "mail", nullable = false, unique = true)
     private String mail;
 
@@ -41,6 +39,7 @@ public class User implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @JsonIgnore
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Roles role;
@@ -90,7 +89,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked(){
-        return role != Roles.BUN;
+        return role != Roles.BAN;
     }
 
     @Override

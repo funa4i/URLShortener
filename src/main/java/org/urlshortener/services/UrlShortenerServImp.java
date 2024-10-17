@@ -58,8 +58,8 @@ public class UrlShortenerServImp implements UrlShortenerServ {
     }
 
     @Override
-    public void changeCurrentUrl(@Valid RefactorUrlRequest urlEntity) {
-        db.saveUrl(urlEntity);
+    public void changeCurrentUrl(Long id, RefactorUrlRequest urlEntity) {
+        db.saveUrl(id, urlEntity);
     }
 
     @Override

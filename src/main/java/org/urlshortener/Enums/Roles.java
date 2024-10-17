@@ -1,7 +1,7 @@
 package org.urlshortener.Enums;
 
 public enum Roles {
-    BUN(-1),
+    BAN(-1),
     USER(0),
     ADMIN(1),
     GOD(2);

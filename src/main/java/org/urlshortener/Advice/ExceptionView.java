@@ -1,9 +1,6 @@
 package org.urlshortener.Advice;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
@@ -16,7 +13,7 @@ public class ExceptionView {
 
     private LocalDateTime timestamp;
 
-    public ExceptionView(Integer status, String message){
+    public ExceptionView(Integer status, String message) {
         this.status = status;
         this.message = message;
         this.timestamp = LocalDateTime.now();

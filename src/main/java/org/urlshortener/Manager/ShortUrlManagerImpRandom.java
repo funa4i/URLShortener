@@ -1,6 +1,5 @@
 package org.urlshortener.Manager;
 
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
@@ -12,7 +11,7 @@ public class ShortUrlManagerImpRandom implements ShortUrlManager {
         var sr = new SecureRandom();
         StringBuilder newUrl = new StringBuilder();
         for (int i = 0; i < 7; i++) {
-            newUrl.append(alphabet.charAt(sr.nextInt(alphabet.length() + 1) - 1));
+            newUrl.append(alphabet.charAt(sr.nextInt(alphabet.length() + 1)));
         }
         return newUrl.toString();
     }

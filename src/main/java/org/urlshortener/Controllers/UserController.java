@@ -15,11 +15,13 @@ public class UserController {
 
     private final UrlShortenerServ srv;
 
+    // Перейти по ссылке
     @GetMapping("/{url}")
     private ResponseEntity<String> getLong(@PathVariable("url") String shortUrl){
         return ResponseEntity.status(303).header("Location", srv.getLongUrl(shortUrl)).body("");
     }
 
+    // Создать новую ссылку
     @PostMapping("/short")
     @ResponseStatus(value = HttpStatus.OK)
     private UrlTransfer getShortenUrl(@RequestBody UrlTransfer url) {

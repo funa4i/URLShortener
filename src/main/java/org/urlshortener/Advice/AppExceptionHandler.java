@@ -7,12 +7,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.expression.AccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.urlshortener.Excemptions.AttemptCountException;
 import org.urlshortener.Excemptions.NullObjectException;
 
-import java.time.LocalDateTime;
 
 @Slf4j
 @RestControllerAdvice

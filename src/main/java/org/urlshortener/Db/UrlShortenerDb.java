@@ -48,6 +48,8 @@ public class UrlShortenerDb {
     @Value(value = "${app.default.linkDurationDays}")
     private Long linkDurationDays;
 
+
+    // Создание нового юзера
     @Transactional
     public void createUser(User newUser, Integer countsPerDay){
         if (userRep.getByMail(newUser.getMail()).isPresent()){
@@ -59,6 +61,7 @@ public class UrlShortenerDb {
         userRep.save(newUser);
     }
 
+    // Все протухшие ссылки (mail, shorLink, longLink)
     @Transactional
     public List<Triple<String, String,String>> getAllExpiredLinks(){
         ArrayList<Triple<String, String, String>> resList = new ArrayList<>();
@@ -66,11 +69,13 @@ public class UrlShortenerDb {
         return resList;
     }
 
+    // Удалить все протухшее
     @Transactional
     public void deleteExpiredLinks(){
         urls.deleteExpiredLinks();
     }
 
+    // Юзера по mail
     @Transactional
     private User getUserByMail(String mail) throws NullObjectException {
         var obj = userRep.getByMail(mail);
@@ -80,6 +85,7 @@ public class UrlShortenerDb {
         return obj.get();
     }
 
+    // Создать url
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     public Url createUrl(Url url) throws NullObjectException {
         var user = getUserByMail(url.getUserMail().getMail());
@@ -103,7 +109,7 @@ public class UrlShortenerDb {
         return url;
     }
 
-
+    // Роль юзера по id
     @Transactional
     public Roles getUserRole(Long id){
         var resRole = users.getUSerRole(id);
@@ -113,6 +119,7 @@ public class UrlShortenerDb {
         return resRole;
     }
 
+    // Роль юзера по mail
     @Transactional
     public Roles getUserRole(String mail){
         var resRole = users.getUSerRole(mail);
@@ -122,7 +129,7 @@ public class UrlShortenerDb {
         return resRole;
     }
 
-
+    // Установить роль для юзера
     @Transactional
     public void setUserRole(Long id, Roles role){
          var ob =  userRep.getById(id).orElseThrow(
@@ -132,6 +139,7 @@ public class UrlShortenerDb {
          userRep.save(ob);
     }
 
+    // Достать по короткой ссылке
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     public Pair<Boolean,Url> getUrlByShort(String shortUrl) throws ExpiredLinkException {
         var longUrl = urlRep
@@ -154,6 +162,8 @@ public class UrlShortenerDb {
         return new Pair<>(longUrl.getIterations() <= 0, longUrl) ;
     }
 
+
+    // Удалить url по id
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void deleteUrl(Long id){
         deleteUrl(urlRep
@@ -163,29 +173,32 @@ public class UrlShortenerDb {
         );
     }
 
+    // Удалить url
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     private void deleteUrl(Url url){
             urlRep.delete(url);
     }
 
+    // Все юзеры
     @Transactional
     public Page<User> getAllUsers(Integer page, Integer limit){
-        var ob = userRep.findAll(PageRequest.of(page, limit));
-        ob.forEach((x) -> x.setPassword(""));
-        return ob;
+        return userRep.findAll(PageRequest.of(page, limit));
     }
 
+    // Все ссылки
     @Transactional
     public Page<Url> getAllUrls(Integer offset, Integer limit){
         return urlRep.findAll(PageRequest.of(offset, limit));
     }
 
+
+    // Изменение ссылки
     @Transactional
-    public void saveUrl(RefactorUrlRequest url){
+    public void saveUrl(Long id, RefactorUrlRequest url) {
         Url saveUrl = urlRep
-                .getById(url.getId())
+                .getById(id)
                 .orElseThrow(
-                () -> new NullObjectException(Url.class.getSimpleName(), url.getId().toString())
+                        () -> new NullObjectException(Url.class.getSimpleName(), id.toString())
         );
         if (url.getNewIterations() != null){
             saveUrl.setIterations(url.getNewIterations());
@@ -196,6 +209,7 @@ public class UrlShortenerDb {
         urlRep.save(saveUrl);
     }
 
+    // Достать юзера по mail
     @Transactional
     public User getUseByMail(String mail){
         return userRep.getByMail(mail).orElseThrow(

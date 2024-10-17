@@ -2,23 +2,19 @@ package org.urlshortener.Controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.urlshortener.Advice.ExceptionView;
 import org.urlshortener.Dto.JwtResponse;
 import org.urlshortener.Dto.UserValid;
 import org.urlshortener.Excemptions.ObjectAlreadyExists;
 import org.urlshortener.services.JwtServ;
-import org.urlshortener.services.UrlShortenerServ;
 import org.urlshortener.services.UserServ;
-
-import java.time.LocalDateTime;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,6 +24,8 @@ public class SecurityController {
     private final JwtServ jwtServ;
     private final AuthenticationManager authenticationManager;
 
+
+    // Регистрация
     @PostMapping("/auth/signUp")
     public ResponseEntity<?> signUp(@RequestBody UserValid user){
         try {
@@ -42,6 +40,7 @@ public class SecurityController {
         }
     }
 
+    // Аутентификация
     @PostMapping("/auth/logIn")
     public ResponseEntity<?> logIn(@RequestBody UserValid user){
         authenticationManager.authenticate(
