@@ -2,6 +2,7 @@ package org.urlshortener.services;
 
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -11,7 +12,7 @@ import org.urlshortener.Db.UrlShortenerDb;
 
 @Service
 @EnableScheduling
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TaskSchedulerUrl {
 
     private final UrlShortenerDb db;
