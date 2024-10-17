@@ -87,24 +87,49 @@ public class UrlShortenerDb {
             user.setCreateLinksLeft(user.getMaxLinkAvail());
             user.setLastCreate(LocalDateTime.now());
         }
-
         if(user.getCreateLinksLeft() <= 0){
             throw new AttemptCountException(user.getLastCreate().plusDays(1));
         }
         url.setUserMail(user);
-
         var shorturl = "";
         do {
             shorturl = urlManager.getNextValue();
         }while (urlRep.getByShortUrl(shorturl).isPresent());
-
         user.decreaseCreatedLinks();
         userRep.save(user);
-
         url.setShortUrl(urlManager.getNextValue());
         url.setValidUntil(LocalDateTime.now().plusDays(linkDurationDays));
         urlRep.save(url);
         return url;
+    }
+
+
+    @Transactional
+    public Roles getUserRole(Long id){
+        var resRole = users.getUSerRole(id);
+        if (resRole == null){
+            throw new NullObjectException(User.class.getSimpleName(), id.toString());
+        }
+        return resRole;
+    }
+
+    @Transactional
+    public Roles getUserRole(String mail){
+        var resRole = users.getUSerRole(mail);
+        if (resRole == null){
+            throw new NullObjectException(User.class.getSimpleName(), mail);
+        }
+        return resRole;
+    }
+
+
+    @Transactional
+    public void setUserRole(Long id, Roles role){
+         var ob =  userRep.getById(id).orElseThrow(
+                 () -> new NullObjectException(User.class.getSimpleName(), id.toString())
+         );
+         ob.setRole(role);
+         userRep.save(ob);
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
@@ -153,15 +178,6 @@ public class UrlShortenerDb {
     @Transactional
     public Page<Url> getAllUrls(Integer offset, Integer limit){
         return urlRep.findAll(PageRequest.of(offset, limit));
-    }
-
-    @Transactional
-    public User getUserById(Long id) throws NullObjectException{
-        return userRep
-                .getById(id)
-                .orElseThrow(
-                () -> new NullObjectException(User.class.getSimpleName(), id.toString())
-        );
     }
 
     @Transactional

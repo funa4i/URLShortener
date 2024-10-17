@@ -10,14 +10,13 @@ import org.urlshortener.Dto.UrlTransfer;
 import org.urlshortener.Dto.UserValid;
 import org.urlshortener.Entities.Url;
 import org.urlshortener.Entities.User;
+import org.urlshortener.Enums.Roles;
 import org.urlshortener.Excemptions.NullObjectException;
 
 public interface UrlShortenerServ {
     UrlTransfer getNewShortURL(@Valid UrlTransfer longURL, @Email String userEmail) throws NullObjectException;
 
     String getLongUrl(@Valid @Pattern(regexp = "([a-z]|[A-Z]|[0-9]|-){7}")  String shortUrl) throws NullObjectException;
-
-    User getUser(@Min(1) Long id);
 
     Page<User> getUsers(@Min(0) Integer page, @Min(1) Integer limit);
 
@@ -26,4 +25,6 @@ public interface UrlShortenerServ {
     void changeCurrentUrl(@Valid RefactorUrlRequest urlEntity);
 
     void deleteUrl(@Valid Long id);
+
+    void setUserRole(String fromWho, Long toId, Roles newRole);
 }

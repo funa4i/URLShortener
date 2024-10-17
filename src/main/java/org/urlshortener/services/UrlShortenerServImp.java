@@ -17,6 +17,8 @@ import org.urlshortener.Dto.UrlTransfer;
 import org.urlshortener.Dto.UserValid;
 import org.urlshortener.Entities.*;
 import org.urlshortener.Db.UrlShortenerDb;
+import org.urlshortener.Enums.Roles;
+import org.urlshortener.Excemptions.AccessRightsException;
 import org.urlshortener.Excemptions.ExpiredLinkException;
 import org.urlshortener.Excemptions.NullObjectException;
 import org.urlshortener.Mappers.IUrlTransferMapper;
@@ -46,11 +48,6 @@ public class UrlShortenerServImp implements UrlShortenerServ {
     }
 
     @Override
-    public User getUser(@Min(1) Long id){
-        return db.getUserById(id);
-    }
-
-    @Override
     public Page<User> getUsers(@Min(0) Integer page, @Min(1) Integer limit) {
         return db.getAllUsers(page, limit);
     }
@@ -69,6 +66,20 @@ public class UrlShortenerServImp implements UrlShortenerServ {
     public void deleteUrl(Long id) {
         db.deleteUrl(id);
     }
+
+    @Override
+    public void setUserRole(String fromWho, Long toId, Roles newRole) {
+
+        var Fr = db.getUserRole(fromWho);
+        var Sr = db.getUserRole(toId);
+        if (Fr.getValue() <= Sr.getValue()
+            || newRole.getValue() > Fr.getValue())
+        {
+            throw new AccessRightsException(Fr.name());
+        }
+        db.setUserRole(toId, newRole);
+    }
+
 
     @Override
     public String getLongUrl(@Valid @Pattern(regexp = "([a-z]|[A-Z]|[0-9]|-){7}") String shortUrl) throws NullObjectException {

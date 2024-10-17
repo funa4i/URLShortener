@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.urlshortener.Dto.RefactorUrlRequest;
+import org.urlshortener.Dto.RoleChangeRequest;
 import org.urlshortener.Entities.Url;
 import org.urlshortener.Entities.User;
 import org.urlshortener.services.UrlShortenerServ;
@@ -17,11 +18,6 @@ import org.urlshortener.services.UrlShortenerServ;
 public class AdminPanelController {
 
     private final UrlShortenerServ srv;
-
-    @GetMapping("/users/{id}")
-    private User getUser(@PathVariable("id") Long id){
-        return srv.getUser(id);
-    }
 
     @GetMapping("/users")
     private Page<User> getUsers(
@@ -50,4 +46,8 @@ public class AdminPanelController {
         srv.changeCurrentUrl(changeUrl);
     }
 
+    @PostMapping("/userRole/{id}")
+    private void setRole(@RequestBody RoleChangeRequest request){
+
+    }
 }
