@@ -4,6 +4,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.expression.AccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -50,5 +51,12 @@ public class AppExceptionHandler {
         return ResponseEntity.status(401)
                 .header("message", "Bad auth")
                 .body(new ExceptionView(401, ex.getMessage()));
+    }
+
+    @ExceptionHandler(AccessException.class)
+    public ResponseEntity<ExceptionView> notAllowed(Exception ex){
+        return ResponseEntity.status(403)
+                .header("message", "Bad Role")
+                .body(new ExceptionView(403, ex.getMessage()));
     }
 }
