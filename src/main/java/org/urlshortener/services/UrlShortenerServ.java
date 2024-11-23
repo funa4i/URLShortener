@@ -5,12 +5,12 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.data.domain.Page;
-import org.urlshortener.Dto.RefactorUrlRequest;
-import org.urlshortener.Dto.UrlTransfer;
-import org.urlshortener.Entities.Url;
-import org.urlshortener.Entities.User;
-import org.urlshortener.Enums.Roles;
-import org.urlshortener.Excemptions.NullObjectException;
+import org.urlshortener.dto.RefactorUrlRequest;
+import org.urlshortener.dto.UrlTransfer;
+import org.urlshortener.entities.Url;
+import org.urlshortener.entities.User;
+import org.urlshortener.enums.Roles;
+import org.urlshortener.exceptions.NullObjectException;
 
 public interface UrlShortenerServ {
 

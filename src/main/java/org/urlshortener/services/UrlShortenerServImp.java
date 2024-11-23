@@ -8,21 +8,19 @@ import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.antlr.v4.runtime.misc.Pair;
 import org.springframework.data.domain.Page;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
-import org.urlshortener.Dto.RefactorUrlRequest;
-import org.urlshortener.Dto.UrlTransfer;
-import org.urlshortener.Dto.UserValid;
-import org.urlshortener.Entities.*;
-import org.urlshortener.Db.UrlShortenerDb;
-import org.urlshortener.Enums.Roles;
-import org.urlshortener.Excemptions.AccessRightsException;
-import org.urlshortener.Excemptions.ExpiredLinkException;
-import org.urlshortener.Excemptions.NullObjectException;
-import org.urlshortener.Mappers.IUrlTransferMapper;
-import org.urlshortener.Mappers.IUserValidMapper;
+import org.urlshortener.dto.RefactorUrlRequest;
+import org.urlshortener.dto.UrlTransfer;
+import org.urlshortener.entities.*;
+import org.urlshortener.db.UrlShortenerDb;
+import org.urlshortener.enums.Roles;
+import org.urlshortener.exceptions.AccessRightsException;
+import org.urlshortener.exceptions.ExpiredLinkException;
+import org.urlshortener.exceptions.NullObjectException;
+import org.urlshortener.mappers.IUrlTransferMapper;
+import org.urlshortener.mappers.IUserValidMapper;
 
 @Service
 @RequiredArgsConstructor
@@ -95,7 +93,7 @@ public class UrlShortenerServImp implements UrlShortenerServ {
         }
 
         if (obj.a) {
-            emailSrv.expiredUrl(obj.b.getUserMail().getMail(),
+            emailSrv.expiredUrl(obj.b.getUser().getMail(),
                     URL_PATTERN + obj.b.getShortUrl(),
                     obj.b.getFullUrl());
         }

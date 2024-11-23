@@ -4,7 +4,7 @@ spring:
     duration: 30m
   application.name: spring
   datasource:
-    url: jdbc:postgresql://localhost:5432/URLShortener
+    url: jdbc:postgresql://localhost:5430/URLShortener
     username: root
     password: password
   jpa:
@@ -15,7 +15,7 @@ spring:
       hibernate:
         format_sql: true
   flyway:
-    url: jdbc:postgresql://localhost:5432/URLShortener
+    url: jdbc:postgresql://localhost:5430/URLShortener
     user: root
     password: password
     locations: classpath:db/migrations
