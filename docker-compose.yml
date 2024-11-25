@@ -41,12 +41,6 @@ services:
           memory: 1G
     networks:
       - postgres
-  url:
-    build: ./
-    ports:
-      - "8080:8080"
-    networks:
-      - postgres
 
 volumes:
   urlShortener-data:

@@ -1,21 +1,20 @@
 package org.urlshortener.advice;
 
 import lombok.Data;
+import org.urlshortener.enums.ExceptionsAnswers;
 
 import java.time.LocalDateTime;
 
 @Data
 public class ExceptionView {
 
-    private Integer status;
 
-    private String message;
+    private ExceptionsAnswers exception;
 
     private LocalDateTime timestamp;
 
-    public ExceptionView(Integer status, String message) {
-        this.status = status;
-        this.message = message;
+    public ExceptionView(ExceptionsAnswers exception) {
+        this.exception = exception;
         this.timestamp = LocalDateTime.now();
     }
 }

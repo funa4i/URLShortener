@@ -43,3 +43,15 @@ app:
     urlPath : http://localhost:8080/
     createCount : 10
     linkDurationDays : 31
+springdoc:
+  api-docs:
+    path: /dock/api-docs
+  swagger-ui:
+    path: /dock/swagger-ui-custom.html
+logging:
+  file:
+    name: logs\application.log
+  level:
+    org.urlshortener:
+        advice: WARN
+        controllers: INFO
