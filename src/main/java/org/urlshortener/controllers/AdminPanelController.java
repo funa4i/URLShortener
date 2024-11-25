@@ -3,6 +3,8 @@ package org.urlshortener.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -18,11 +20,13 @@ import org.urlshortener.services.UrlShortenerServ;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Admin", description = "Admin API")
 public class AdminPanelController {
 
     private final UrlShortenerServ srv;
 
     // Все юзеры
+    @Operation(summary = "Gets all users", tags = "Admin")
     @GetMapping("/admin/users")
     public Page<User> getUsers(
             @RequestParam(name = "page",  required = false ,defaultValue = "${app.default.page.page}")  Integer page,
@@ -35,6 +39,7 @@ public class AdminPanelController {
     }
 
     // Все ссылки
+    @Operation(summary = "Gets all urls", tags = "Admin")
     @GetMapping("/admin/urls")
     public Page<Url> getUrls(
             @RequestParam(name = "page",  required = false ,defaultValue = "${app.default.page.page}")  Integer page,
@@ -48,6 +53,7 @@ public class AdminPanelController {
     }
 
     // Удалить ссылку
+    @Operation(summary = "Delete definite link", tags = "Admin")
     @ResponseStatus(value = HttpStatus.OK)
     @DeleteMapping("/admin/urls/{id}")
     public void delUrl(@PathVariable("id") Long id){
@@ -57,6 +63,8 @@ public class AdminPanelController {
     }
 
     // Сохранить изменение
+
+    @Operation(summary = "Change definite url", tags = "Admin")
     @PatchMapping("/admin/linkChange/{id}")
     public void saveUrl(@RequestBody RefactorUrlRequest changeUrl, @PathVariable("id") Long id) {
         log.info("Path /admin/linkChange/" + id);
@@ -64,6 +72,8 @@ public class AdminPanelController {
     }
 
     //Изменить роль
+
+    @Operation(summary = "Change definite user role", tags = "Admin")
     @PostMapping("/admin/userRole/{id}")
     public void setRole(@RequestBody RoleChangeRequest request, @PathVariable("id") Long id) {
         log.info("Path /admin/userRole/" + id);

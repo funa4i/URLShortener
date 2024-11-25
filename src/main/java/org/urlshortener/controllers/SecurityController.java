@@ -1,5 +1,7 @@
 package org.urlshortener.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,7 @@ import org.urlshortener.services.UserServ;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
+@Tag(name = "Auth", description = "Auth API")
 public class SecurityController {
 
     private final UserServ userServ;
@@ -29,6 +32,7 @@ public class SecurityController {
 
 
     // Регистрация
+    @Operation(summary = "SignUp", tags = "Auth")
     @PostMapping("/auth/signUp")
     public ResponseEntity<?> signUp(@RequestBody UserValid user){
         try {
@@ -46,6 +50,7 @@ public class SecurityController {
     }
 
     // Аутентификация
+    @Operation(summary = "logIn", tags = "Auth")
     @PostMapping("/auth/logIn")
     public ResponseEntity<?> logIn(@RequestBody UserValid user){
         log.info("/auth/logIn Email:" + user.getEmail());

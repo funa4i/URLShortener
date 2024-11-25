@@ -46,11 +46,11 @@ public class SecureConfig {
                     return corsConfiguration;
                 }))
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/{url}").permitAll()
-                        .requestMatchers( "/auth/**").permitAll()
-                        .requestMatchers("/short").hasAuthority("USER")
-                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
-                        .anyRequest().authenticated())
+//                        .requestMatchers("/{url}").permitAll()
+//                        .requestMatchers( "/auth/**").permitAll()
+//                        .requestMatchers("/short").hasAuthority("USER")
+//                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                        .anyRequest().permitAll())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtReqFilter, UsernamePasswordAuthenticationFilter.class);
