@@ -7,9 +7,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.urlshortener.Db.UrlShortenerDb;
-import org.urlshortener.Dto.UserValid;
-import org.urlshortener.Mappers.IUserValidMapper;
+import org.urlshortener.db.UrlShortenerDb;
+import org.urlshortener.dto.UserValid;
+import org.urlshortener.mappers.IUserValidMapper;
 
 
 @Service
